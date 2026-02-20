@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-    use Illuminate\Support\Str;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Course extends Model
 {
@@ -40,6 +41,11 @@ class Course extends Model
         'is_published' => 'boolean',
     ];
 
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('collection', 'image');
+    }
+
     public function level(): BelongsTo
     {
         return $this->belongsTo(Level::class);
@@ -47,12 +53,18 @@ class Course extends Model
 
     public function lessons(): HasMany
     {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Lesson::class)->orderBy('order');
+    }
+
+    public function completions(): HasMany
+    {
+        return $this->hasMany(CourseCompletion::class);
     }
 
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'enrollments')
+            ->using(Enrollment::class)
             ->withPivot('enrolled_at')
             ->withTimestamps();
     }

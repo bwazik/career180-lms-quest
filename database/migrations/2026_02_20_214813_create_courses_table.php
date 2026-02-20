@@ -20,8 +20,6 @@ return new class extends Migration
             $table->boolean('is_published')->default(false)->index();
             $table->softDeletes();
             $table->timestamps();
-
-            $table->unique(['slug', 'deleted_at']);
         });
     }
 

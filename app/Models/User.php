@@ -52,6 +52,7 @@ class User extends Authenticatable
     public function enrollments(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'enrollments')
+            ->using(Enrollment::class)
             ->withPivot('enrolled_at')
             ->withTimestamps();
     }
@@ -59,6 +60,7 @@ class User extends Authenticatable
     public function courseCompletions(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_completions')
+            ->using(CourseCompletion::class)
             ->withPivot('completed_at')
             ->withTimestamps();
     }
@@ -66,6 +68,7 @@ class User extends Authenticatable
     public function lessonProgress(): BelongsToMany
     {
         return $this->belongsToMany(Lesson::class, 'lesson_progress')
+            ->using(LessonProgress::class)
             ->withPivot(['started_at', 'completed_at', 'watch_seconds'])
             ->withTimestamps();
     }
