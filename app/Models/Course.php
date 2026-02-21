@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasImages;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Course extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasImages;
 
     protected static function booted(): void
     {
@@ -67,5 +68,10 @@ class Course extends Model
             ->using(Enrollment::class)
             ->withPivot('enrolled_at')
             ->withTimestamps();
+    }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
     }
 }

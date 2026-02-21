@@ -22,7 +22,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->unique(['course_id', 'order']);
+            $table->index(['course_id', 'order']);
         });
     }
 
