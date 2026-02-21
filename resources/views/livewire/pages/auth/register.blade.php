@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use App\Actions\RegisterUserAction;
 
 new #[Layout('layouts.guest')] class extends Component
 {
@@ -18,7 +19,7 @@ new #[Layout('layouts.guest')] class extends Component
     /**
      * Handle an incoming registration request.
      */
-    public function register(): void
+    public function register(RegisterUserAction $registerUser): void
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -28,7 +29,13 @@ new #[Layout('layouts.guest')] class extends Component
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered($user = User::create($validated)));
+        $user = $registerUser([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+        ]);
+
+        event(new Registered($user));
 
         Auth::login($user);
 

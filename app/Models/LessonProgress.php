@@ -27,4 +27,14 @@ class LessonProgress extends Pivot
         'completed_at' => 'datetime',
         'watch_seconds' => 'integer',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
+    }
 }
