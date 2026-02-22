@@ -3,7 +3,7 @@
 [![Laravel 12](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
 [![Livewire 3](https://img.shields.io/badge/Livewire-3.x-FB70A9?style=for-the-badge&logo=livewire)](https://livewire.laravel.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
-[![Pest PHP](https://img.shields.io/badge/Pest-2.x-0195ff?style=for-the-badge&logo=pest)](https://pestphp.ai)
+[![Pest PHP](https://img.shields.io/badge/Pest-2.x-0195ff?style=for-the-badge&logo=pest)](https://pestphp.com/)
 
 A high-performance Mini-LMS built for the **Career 180 Quest**. This project demonstrates a production-ready architecture focusing on data integrity, idempotent business logic, and a seamless "Theater Mode" user experience.
 
@@ -11,7 +11,7 @@ A high-performance Mini-LMS built for the **Career 180 Quest**. This project dem
 
 ## 🚀 Live Demo & Credentials
 
-**Live URL:** https://career180.shattor.com  
+**Live URL:** https://career180.shattor.com
 **Admin Panel:** `/admin`
 
 | Role | Email | Password |
@@ -21,12 +21,27 @@ A high-performance Mini-LMS built for the **Career 180 Quest**. This project dem
 
 ---
 
+## 📸 Agile Workflow & Visual Overview
+
+To ensure 100% compliance with the Career 180 Quest requirements, this project was managed using strict Agile methodologies. Every feature was broken down into granular tasks and tracked systematically.
+
+| 🗂️ Kanban Project Board | 📋 Detailed Task Tracking |
+| :---: | :---: |
+| ![Project Board](github-board-screenshot.png) <br> *High-level tracking of features across Pending, In Progress, and Done columns.* | ![Issue Tasks](github-issue-tasks-screenshot.png) <br> *Granular task breakdowns inside GitHub Issues ensuring no requirement is missed.* |
+
+<br>
+
+| ✉️ Automated Email Delivery |
+| :---: |
+| ![Welcome Email](welcome-email-screenshot.png) <br> *Polished Welcome Email automatically queued and delivered upon student registration.* |
+---
+
 ## 🛠️ Technical Highlights
 
 This submission goes beyond basic CRUD functionality by implementing several senior-level architectural patterns:
 
 *   **⚡ Idempotent Action Pattern:** Core business flows (Enrollment, Registration, Progress Tracking) are encapsulated in single-responsibility, invokable Action classes. These utilize database transactions and `firstOrCreate` logic to ensure system stability even under rapid-fire or concurrent requests.
-*   **🎥 Alpine.js & Plyr Hybrid:** Video progress is managed via a sophisticated Alpine.js bridge to Plyr.io. Progress is tracked client-side and synced to the Laravel backend using throttled updates (every 10 seconds) to minimize server load while maintaining accuracy.
+*   **🎥 Alpine.js & Plyr Hybrid:** Video progress is managed via Alpine.js bridge to Plyr.io. Progress is tracked client-side and synced to the Laravel backend using throttled updates (every 10 seconds) to minimize server load while maintaining accuracy.
 *   **🔗 Unique Slug Soft-Delete Handling:** Solved the "Unique Constraint vs. Soft Delete" conflict by implementing a model observer that appends a timestamp to slugs upon deletion, allowing original slugs to be reused immediately while preserving data history.
 *   **🌍 Global Timezone Strategy:** All timestamps are stored in **UTC**. The frontend utilizes a custom Alpine.js `local-time` component to detect the user's browser timezone and format timestamps locally via the `Intl.DateTimeFormat` API.
 
@@ -89,15 +104,15 @@ php artisan test
 ## 📝 Assumptions & Limitations
 
 *   **Linearity:** Students can navigate lessons freely within a course. While progress is tracked, strict "Lesson Locking" (requiring Lesson 1 to finish before Lesson 2) was omitted to enhance the user's learning flexibility.
-*   **Payments:** The enrollment flow is "Open Access." While the UI supports an enrollment trigger, payment gateways are mocked/omitted as the focus was on the core LMS logic and progress engine.
+*   **Payments:** The enrollment flow is "Open Access." While the UI supports an enrollment trigger, payment gateways are omitted as the focus was on the core LMS logic and progress engine.
 *   **Storage:** Course images and videos are served locally for the prototype. In a production environment, these would be offloaded to an S3-compatible bucket.
 
 ---
 
 ## 🔮 If I had more time...
 
-Given more time, I would implement the following architectural enhancements:
+Given more time, I would focus on implementing the following pragmatic enhancements to make the platform fully production-ready for a broader audience:
 
-1.  **Denormalized Progress Caching:** Transition the real-time progress calculation to a denormalized column on the `enrollments` table. I would use **Queued Jobs** to update this value asynchronously, ensuring the Admin panel remains lightning-fast even with tens of thousands of users.
-2.  **Netflix-style Resume Logic:** Store the exact `watch_seconds` in the database on a `beforeunload` event. This would allow students to refresh their page and have the Plyr player automatically seek to the exact second where they left off.
-3.  **Drop-off Analytics:** Build a "Lesson Heatmap" for instructors. By tracking where users stop watching, we could provide admins with visual analytics identifying "difficult" or "boring" lessons that need content updates.
+1. **Localization & Multi-Language Support (AR & EN):** Implement full localization support (Arabic/English) to make the platform accessible to the MENA region, including adapting the Tailwind CSS layout for seamless RTL (Right-to-Left) experiences.
+2. **Progress Caching Strategy:** Instead of calculating course progress dynamically on-the-fly, I would introduce a caching layer (e.g., using Redis or Database) or store denormalized progress values. This would significantly optimize database queries and load times as the student base grows.
+3. **Cloud Video Hosting & Security:** Migrate video assets from local storage to a secure cloud provider (such as AWS S3 or Bunny) utilizing signed URLs. This would enhance asset security, prevent unauthorized downloads, and provide more robust telemetry for exact watch-time tracking.

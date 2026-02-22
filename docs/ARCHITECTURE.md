@@ -38,6 +38,8 @@ We have decoupled the core business logic from Controllers and Livewire componen
 ### 4. 🗄️ Database Constraints & Soft-Delete Strategy
 Data integrity is enforced at the persistence layer to act as the final line of defense.
 
+![Entity Relationship Diagram](erd.png)
+
 *   **Composite Unique Constraints:** Tables like `enrollments` and `lesson_progress` utilize composite unique indexes (e.g., `unique(['user_id', 'course_id'])`). This prevents data duplication at the engine level (MySQL/PostgreSQL).
 *   **Soft-Delete Aware Unique Slugs:** Standard Laravel unique constraints often conflict with `SoftDeletes`. 
     *   **The Strategy:** We implemented a **Model Observer** on the `Course` model. 
