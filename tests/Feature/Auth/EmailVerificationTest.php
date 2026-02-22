@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Feature\Auth;
+
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
@@ -10,7 +12,9 @@ test('email verification screen can be rendered', function () {
 
     $response = $this->actingAs($user)->get('/verify-email');
 
-    $response->assertStatus(200);
+    $response
+        ->assertStatus(200)
+        ->assertSee('Verify Your Email');
 });
 
 test('email can be verified', function () {

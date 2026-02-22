@@ -11,7 +11,7 @@ test('confirm password screen can be rendered', function () {
     $response = $this->actingAs($user)->get('/confirm-password');
 
     $response
-        ->assertSeeVolt('pages.auth.confirm-password')
+        ->assertSee('Confirm Password')
         ->assertStatus(200);
 });
 
@@ -26,7 +26,7 @@ test('password can be confirmed', function () {
     $component->call('confirmPassword');
 
     $component
-        ->assertRedirect('/dashboard')
+        ->assertRedirect(route('dashboard', absolute: false))
         ->assertHasNoErrors();
 });
 

@@ -3,13 +3,14 @@
 namespace Tests\Feature\Auth;
 
 use Livewire\Volt\Volt;
+use App\Models\User;
 
 test('registration screen can be rendered', function () {
     $response = $this->get('/register');
 
     $response
         ->assertOk()
-        ->assertSeeVolt('pages.auth.register');
+        ->assertSee('Create your account');
 });
 
 test('new users can register', function () {

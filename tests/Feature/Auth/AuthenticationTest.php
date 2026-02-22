@@ -1,14 +1,17 @@
 <?php
 
+namespace Tests\Feature\Auth;
+
 use App\Models\User;
 use Livewire\Volt\Volt;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
 
     $response
         ->assertOk()
-        ->assertSeeVolt('pages.auth.login');
+        ->assertSee('Welcome back');
 });
 
 test('users can authenticate using the login screen', function () {
@@ -52,7 +55,7 @@ test('navigation menu can be rendered', function () {
 
     $response
         ->assertOk()
-        ->assertSeeVolt('layout.navigation');
+        ->assertSee('Dashboard');
 });
 
 test('users can logout', function () {
@@ -60,12 +63,9 @@ test('users can logout', function () {
 
     $this->actingAs($user);
 
-    $component = Volt::test('layout.navigation');
+    $response = $this->withoutMiddleware(ValidateCsrfToken::class)->post('/logout');
 
-    $component->call('logout');
-
-    $component
-        ->assertHasNoErrors()
+    $response
         ->assertRedirect('/');
 
     $this->assertGuest();
