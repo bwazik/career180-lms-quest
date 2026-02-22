@@ -74,4 +74,10 @@ class Course extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    # Scopes
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
 }

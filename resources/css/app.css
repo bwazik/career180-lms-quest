@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+@layer utilities {
+    /* Gradient text utility */
+    .text-gradient {
+        background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Glassmorphism surfaces */
+    .glass {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .glass-light {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    /* Shimmer gradient for CTAs */
+    .shimmer-bg {
+        background: linear-gradient(
+            110deg,
+            #4f46e5 0%,
+            #6366f1 40%,
+            #818cf8 50%,
+            #6366f1 60%,
+            #4f46e5 100%
+        );
+        background-size: 200% 100%;
+    }
+
+    /* Glow ring on hover */
+    .glow-ring {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+        transition: box-shadow 0.3s ease;
+    }
+    .glow-ring:hover {
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Hide scrollbar but allow scrolling */
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}

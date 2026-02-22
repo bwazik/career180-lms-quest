@@ -108,7 +108,7 @@ class CourseSeeder extends Seeder
         }
 
         $lessonCount = rand(3, 5);
-        $videoUrl = 'https://www.youtube.com/watch?v=Uu8Jfo1yI18';
+        $videoUrl = 'videos/sample.mp4';
 
         for ($i = 1; $i <= $lessonCount; $i++) {
             Lesson::create([
