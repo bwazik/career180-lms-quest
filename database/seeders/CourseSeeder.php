@@ -115,7 +115,7 @@ class CourseSeeder extends Seeder
                 'course_id' => $course->id,
                 'title' => "Lesson $i: Introduction to " . Str::limit($course->title, 20),
                 'video_url' => $videoUrl,
-                'duration_seconds' => rand(300, 1500),
+                'duration_seconds' => rand(300, 1200),
                 'order' => $i,
                 'is_free_preview' => ($i === 1),
             ]);
