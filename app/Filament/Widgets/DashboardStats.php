@@ -25,6 +25,15 @@ class DashboardStats extends BaseWidget
                 ->description('Number of users who have completed a course')
                 ->descriptionIcon('heroicon-m-check-badge')
                 ->color('warning'),
+            Stat::make('Avg. Completion Rate', function () {
+                $totalEnrollments = Enrollment::count();
+                if ($totalEnrollments === 0) return '0%';
+                $completions = CourseCompletion::count();
+                return round(($completions / $totalEnrollments) * 100, 1) . '%';
+            })
+                ->description('Percentage of enrollments that resulted in completion')
+                ->descriptionIcon('heroicon-m-chart-bar')
+                ->color('info'),
         ];
     }
 }

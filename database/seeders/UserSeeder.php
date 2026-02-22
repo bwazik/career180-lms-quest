@@ -17,10 +17,10 @@ class UserSeeder extends Seeder
 
         // 1. Admin User
         User::firstOrCreate(
-            ['email' => 'admin@admin.com'],
+            ['email' => 'youwillhireme@career180.com'],
             [
                 'name' => 'Admin User',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('iwillhireyou'),
                 'is_admin' => true,
                 'email_verified_at' => now(),
             ]
@@ -28,10 +28,10 @@ class UserSeeder extends Seeder
 
         // 2. Regular Student User
         User::firstOrCreate(
-            ['email' => 'student@student.com'],
+            ['email' => 'youwillhiremealso@career180.com'],
             [
                 'name' => 'Student User',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('iwillhireyou'),
                 'is_admin' => false,
                 'email_verified_at' => now(),
             ]
