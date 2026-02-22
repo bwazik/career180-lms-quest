@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasImages;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,13 +14,20 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Course extends Model
 {
-    use SoftDeletes, HasImages;
+    use SoftDeletes, HasImages, HasFactory;
 
     protected static function booted(): void
     {
         static::saving(function ($course) {
             if (empty($course->slug)) {
                 $course->slug = Str::slug($course->title);
+            }
+        });
+
+        static::deleting(function ($course) {
+            if (! $course->isForceDeleting()) {
+                $course->slug .= '::deleted::' . time();
+                $course->save();
             }
         });
     }
