@@ -25,7 +25,7 @@ class CourseShow extends Component
     {
         $this->course = Course::where('slug', $slug)
             ->published()
-            ->with(['level', 'image', 'lessons' => fn($query) => $query->orderBy('order')])
+            ->with(['level', 'image', 'lessons' => fn($query) => $query->ordered()])
             ->firstOrFail();
 
         if (Auth::check()) {

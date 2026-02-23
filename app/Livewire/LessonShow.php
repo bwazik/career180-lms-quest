@@ -60,7 +60,7 @@ class LessonShow extends Component
     private function loadAllLessons(): void
     {
         $this->allLessons = Lesson::where('course_id', $this->course->id)
-            ->orderBy('order')
+            ->ordered()
             ->get();
 
         if (Auth::check()) {
@@ -88,12 +88,12 @@ class LessonShow extends Component
     {
         $this->nextLesson = Lesson::where('course_id', $this->course->id)
             ->where('order', '>', $this->lesson->order)
-            ->orderBy('order', 'asc')
+            ->ordered()
             ->first();
 
         $this->prevLesson = Lesson::where('course_id', $this->course->id)
             ->where('order', '<', $this->lesson->order)
-            ->orderBy('order', 'desc')
+            ->ordered('desc')
             ->first();
     }
 

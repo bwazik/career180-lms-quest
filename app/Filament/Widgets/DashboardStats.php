@@ -13,7 +13,7 @@ class DashboardStats extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Published Courses', Course::where('is_published', true)->count())
+            Stat::make('Total Published Courses', Course::published()->count())
                 ->description('Active courses available for enrollment')
                 ->descriptionIcon('heroicon-m-academic-cap')
                 ->color('success'),

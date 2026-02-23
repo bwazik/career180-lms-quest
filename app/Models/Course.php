@@ -3,34 +3,46 @@
 namespace App\Models;
 
 use App\Traits\HasImages;
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Course
+ *
+ * @property int $id
+ * @property int $level_id
+ * @property string $title
+ * @property string $slug
+ * @property string $description
+ * @property bool $is_published
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @property-read \App\Models\Level $level
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lesson[] $lessons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CourseCompletion[] $completions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Enrollment[] $enrollments
+ * @property-read \App\Models\Image|null $image
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Course newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Course newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Course query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Course published()
+ * @method static \Illuminate\Database\Query\Builder|Course onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Course withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Course withoutTrashed()
+ */
 class Course extends Model
 {
-    use SoftDeletes, HasImages, HasFactory;
-
-    protected static function booted(): void
-    {
-        static::saving(function ($course) {
-            if (empty($course->slug)) {
-                $course->slug = Str::slug($course->title);
-            }
-        });
-
-        static::deleting(function ($course) {
-            if (! $course->isForceDeleting()) {
-                $course->slug .= '::deleted::' . time();
-                $course->save();
-            }
-        });
-    }
+    use HasFactory, HasImages, HasSlug, SoftDeletes;
 
     protected $fillable = [
         'level_id',
@@ -50,6 +62,11 @@ class Course extends Model
         'is_published' => 'boolean',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
     public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable')->where('collection', 'image');
@@ -62,7 +79,7 @@ class Course extends Model
 
     public function lessons(): HasMany
     {
-        return $this->hasMany(Lesson::class)->orderBy('order');
+        return $this->hasMany(Lesson::class)->ordered();
     }
 
     public function completions(): HasMany
@@ -83,7 +100,11 @@ class Course extends Model
         return $this->hasMany(Enrollment::class);
     }
 
-    # Scopes
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes & Methods
+    |--------------------------------------------------------------------------
+    */
     public function scopePublished($query)
     {
         return $query->where('is_published', true);

@@ -18,7 +18,7 @@ class StudentDashboard extends Component
         $user = Auth::user();
 
         $enrolledCourses = $user->enrollments()
-            ->with(['image', 'level', 'lessons' => fn($q) => $q->orderBy('order')])
+            ->with(['image', 'level', 'lessons' => fn($q) => $q->ordered()])
             ->withCount('lessons')
             ->get();
 

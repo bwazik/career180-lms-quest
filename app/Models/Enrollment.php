@@ -2,8 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * App\Models\Enrollment
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $course_id
+ * @property \Illuminate\Support\Carbon|null $enrolled_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Models\User $user
+ * @property-read \App\Models\Course $course
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Enrollment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Enrollment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Enrollment query()
+ */
 class Enrollment extends Pivot
 {
     protected $table = 'enrollments';
@@ -24,8 +42,18 @@ class Enrollment extends Pivot
         'enrolled_at' => 'datetime',
     ];
 
-    public function user()
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
     }
 }

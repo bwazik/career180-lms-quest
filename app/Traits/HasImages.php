@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Image;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Storage;
 
 trait HasImages
@@ -14,11 +15,14 @@ trait HasImages
         });
     }
 
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
     protected function deleteAllImagesOnDelete()
     {
-        $images = Image::where('imageable_type', get_class($this))
-            ->where('imageable_id', $this->id)
-            ->get();
+        $images = $this->images()->get();
 
         foreach ($images as $image) {
             if (Storage::disk($image->disk)->exists($image->path)) {

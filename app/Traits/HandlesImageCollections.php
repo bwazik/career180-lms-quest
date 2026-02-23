@@ -54,10 +54,7 @@ trait HandlesImageCollections
         foreach ($imageFields as $field) {
             if ($singleImage) {
                 // For single images (like logo)
-                $image = Image::where('imageable_type', get_class($record))
-                    ->where('imageable_id', $record->id)
-                    ->where('collection', $field)
-                    ->first();
+                $image = $record->images()->collection($field)->first();
 
                 if ($image) {
                     $data[$field] = $image->path;
@@ -65,9 +62,8 @@ trait HandlesImageCollections
                 }
             } else {
                 // For multiple images (like gallery, menu)
-                $images = Image::where('imageable_type', get_class($record))
-                    ->where('imageable_id', $record->id)
-                    ->where('collection', $field)
+                $images = $record->images()
+                    ->collection($field)
                     ->orderBy('sort_order')
                     ->get();
 
@@ -132,9 +128,7 @@ trait HandlesImageCollections
                 continue;
             }
 
-            Image::create([
-                'imageable_type' => get_class($record),
-                'imageable_id' => $record->id,
+            $record->images()->create([
                 'path' => $path,
                 'disk' => 'public',
                 'collection' => $collection,
@@ -154,10 +148,7 @@ trait HandlesImageCollections
     protected function updateImageCollection(Model $record, string $collection, array $newPaths): void
     {
         // Get existing images from database
-        $existingImages = Image::where('imageable_type', get_class($record))
-            ->where('imageable_id', $record->id)
-            ->where('collection', $collection)
-            ->get();
+        $existingImages = $record->images()->collection($collection)->get();
 
         $existingPaths = $existingImages->pluck('path')->toArray();
         $newPaths = $newPaths ?? [];
@@ -191,9 +182,7 @@ trait HandlesImageCollections
 
             $sortOrder = array_search($pathToAdd, $newPaths);
 
-            Image::create([
-                'imageable_type' => get_class($record),
-                'imageable_id' => $record->id,
+            $record->images()->create([
                 'path' => $pathToAdd,
                 'disk' => 'public',
                 'collection' => $collection,
